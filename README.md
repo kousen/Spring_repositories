@@ -3,4 +3,4 @@ Simple demo of Spring for persistence, with examples using JdbcTemplate, Jpa, an
 
 Prepared for O'Reilly screencast on Java Persistence with Spring, Oct 26, 2016
 
-Ken Kouse
+Ken Kousen
