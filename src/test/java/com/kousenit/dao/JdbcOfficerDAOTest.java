@@ -47,8 +47,7 @@ public class JdbcOfficerDAOTest {
                 "    last_name VARCHAR(20) NOT NULL,\n" +
                 "    PRIMARY KEY(id)\n" +
                 ")");
-        officers.stream()
-                .forEach(officer -> dao.save(officer));
+        officers.forEach(officer -> dao.save(officer));
     }
 
 //    @After

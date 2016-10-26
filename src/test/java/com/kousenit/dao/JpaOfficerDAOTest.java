@@ -45,8 +45,7 @@ public class JpaOfficerDAOTest {
 
     @Test
     public void findOne() throws Exception {
-        officers.stream()
-                .forEach(officer -> dao.save(officer));
+        officers.forEach(officer -> dao.save(officer));
         officers.stream()
                 .mapToInt(Officer::getId)
                 .forEach(id -> {
@@ -58,8 +57,7 @@ public class JpaOfficerDAOTest {
 
     @Test
     public void findAll() throws Exception {
-        officers.stream()
-                .forEach(officer -> dao.save(officer));
+        officers.forEach(officer -> dao.save(officer));
         List<String> dbNames = dao.findAll().stream()
                 .map(Officer::getLast)
                 .collect(Collectors.toList());
@@ -68,15 +66,13 @@ public class JpaOfficerDAOTest {
 
     @Test
     public void count() throws Exception {
-        officers.stream()
-                .forEach(officer -> dao.save(officer));
+        officers.forEach(officer -> dao.save(officer));
         assertEquals(5, dao.count().longValue());
     }
 
     @Test
     public void delete() throws Exception {
-        officers.stream()
-                .forEach(officer -> dao.save(officer));
+        officers.forEach(officer -> dao.save(officer));
         officers.stream()
                 .mapToInt(Officer::getId)
                 .forEach(id -> dao.delete(dao.findOne(id)));
@@ -85,8 +81,7 @@ public class JpaOfficerDAOTest {
 
     @Test
     public void exists() throws Exception {
-        officers.stream()
-                .forEach(officer -> dao.save(officer));
+        officers.forEach(officer -> dao.save(officer));
         officers.stream()
                 .mapToInt(Officer::getId)
                 .forEach(id -> assertTrue(String.format("%d should exist", id),

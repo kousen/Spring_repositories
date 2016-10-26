@@ -44,8 +44,7 @@ public class OfficerRepositoryTest {
 
     @Test
     public void findOne() throws Exception {
-        officers.stream()
-                .forEach(officer -> entityManager.persist(officer));
+        officers.forEach(officer -> entityManager.persist(officer));
         officers.stream()
                 .mapToInt(Officer::getId)
                 .forEach(id -> {
@@ -57,8 +56,7 @@ public class OfficerRepositoryTest {
 
     @Test
     public void findAll() throws Exception {
-        officers.stream()
-                .forEach(officer -> entityManager.persist(officer));
+        officers.forEach(officer -> entityManager.persist(officer));
         List<String> dbNames = repository.findAll().stream()
                 .map(Officer::getLast)
                 .collect(Collectors.toList());
@@ -67,15 +65,13 @@ public class OfficerRepositoryTest {
 
     @Test
     public void count() throws Exception {
-        officers.stream()
-                .forEach(officer -> entityManager.persist(officer));
+        officers.forEach(officer -> entityManager.persist(officer));
         assertEquals(5, repository.count());
     }
 
     @Test
     public void delete() throws Exception {
-        officers.stream()
-                .forEach(officer -> entityManager.persist(officer));
+        officers.forEach(officer -> entityManager.persist(officer));
         officers.stream()
                 .mapToInt(Officer::getId)
                 .forEach(id -> repository.delete(repository.findOne(id)));
@@ -84,8 +80,7 @@ public class OfficerRepositoryTest {
 
     @Test
     public void exists() throws Exception {
-        officers.stream()
-                .forEach(officer -> entityManager.persist(officer));
+        officers.forEach(officer -> entityManager.persist(officer));
         officers.stream()
                 .mapToInt(Officer::getId)
                 .forEach(id -> assertTrue(String.format("%d should exist", id),
@@ -94,8 +89,7 @@ public class OfficerRepositoryTest {
 
     @Test
     public void findByRank() throws Exception {
-        officers.stream()
-                .forEach(officer -> entityManager.persist(officer));
+        officers.forEach(officer -> entityManager.persist(officer));
         repository.findByRank(Rank.CAPTAIN).forEach(captain ->
                 assertEquals(Rank.CAPTAIN, captain.getRank()));
 
@@ -103,8 +97,7 @@ public class OfficerRepositoryTest {
 
     @Test
     public void findByLast() throws Exception {
-        officers.stream()
-                .forEach(officer -> entityManager.persist(officer));
+        officers.forEach(officer -> entityManager.persist(officer));
         List<String> lastNames = Arrays.asList("Kirk", "Picard", "Sisko", "Janeway", "Archer");
         lastNames.forEach(lastName ->
                 assertEquals(lastName, repository.findByLast(lastName).getLast()));
