@@ -1,23 +1,31 @@
 package com.kousenit.entities;
 
 public class Officer {
-    private int id;
+    private Integer id;
     private Rank rank;
     private String first;
     private String last;
 
-    public Officer(int id, Rank rank, String first, String last) {
+    public Officer() {}
+
+    public Officer(Rank rank, String first, String last) {
+        this.rank = rank;
+        this.first = first;
+        this.last = last;
+    }
+
+    public Officer(Integer id, Rank rank, String first, String last) {
         this.id = id;
         this.rank = rank;
         this.first = first;
         this.last = last;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -53,5 +61,27 @@ public class Officer {
                 ", first='" + first + '\'' +
                 ", last='" + last + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Officer)) return false;
+
+        Officer officer = (Officer) o;
+
+        if (!id.equals(officer.id)) return false;
+        if (rank != officer.rank) return false;
+        if (first != null ? !first.equals(officer.first) : officer.first != null) return false;
+        return last.equals(officer.last);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + rank.hashCode();
+        result = 31 * result + (first != null ? first.hashCode() : 0);
+        result = 31 * result + last.hashCode();
+        return result;
     }
 }
