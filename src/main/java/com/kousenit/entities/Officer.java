@@ -1,9 +1,21 @@
 package com.kousenit.entities;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "officers")
 public class Officer {
+    @Id
+    @GeneratedValue
     private Integer id;
+
+    @Column(nullable = false)
     private Rank rank;
+
+    @Column(nullable = false, name = "first_name")
     private String first;
+
+    @Column(nullable = false, name = "last_name")
     private String last;
 
     public Officer() {}
