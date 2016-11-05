@@ -15,9 +15,6 @@ import java.util.stream.Stream;
 @SpringBootApplication
 public class PersistenceApplication {
 
-    @Autowired
-    private JdbcTemplate template;
-
 	public static void main(String[] args) {
 		SpringApplication.run(PersistenceApplication.class, args);
 	}
