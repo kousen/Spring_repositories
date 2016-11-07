@@ -83,6 +83,7 @@ public class OfficerRepositoryTest {
     public void findByLast() throws Exception {
         List<String> lastNames = Arrays.asList("Kirk", "Picard", "Sisko", "Janeway", "Archer");
         lastNames.forEach(lastName ->
-                assertEquals(lastName, repository.findByLast(lastName).getLast()));
+                assertEquals(lastName,
+                        repository.findByLast(lastName).orElseGet(Officer::new).getLast()));
     }
 }
