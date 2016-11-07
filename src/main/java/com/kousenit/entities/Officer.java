@@ -10,6 +10,7 @@ public class Officer {
     private Integer id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Rank rank;
 
     @Column(nullable = false, name = "first_name")

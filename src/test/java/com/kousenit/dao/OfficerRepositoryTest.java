@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -20,17 +20,10 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 public class OfficerRepositoryTest {
     @Autowired
-    private TestEntityManager entityManager;
-
-    @Autowired
     private OfficerRepository repository;
 
-    private List<Officer> officers =
-            Arrays.asList(new Officer(Rank.CAPTAIN, "James", "Kirk"),
-                    new Officer(Rank.CAPTAIN, "Jean-Luc", "Picard"),
-                    new Officer(Rank.CAPTAIN, "Kathryn", "Janeway"),
-                    new Officer(Rank.CAPTAIN, "Benjamin", "Sisko"),
-                    new Officer(Rank.CAPTAIN, "Jonathan", "Archer"));
+    @Autowired
+    private JdbcTemplate template;
 
     @Test
     public void testSave() throws Exception {
@@ -44,19 +37,16 @@ public class OfficerRepositoryTest {
 
     @Test
     public void findOne() throws Exception {
-        officers.forEach(officer -> entityManager.persist(officer));
-        officers.stream()
-                .mapToInt(Officer::getId)
+        template.query("select id from officers", (rs, num) -> rs.getInt("id"))
                 .forEach(id -> {
                     Officer officer = repository.findOne(id);
                     assertNotNull(officer);
-                    assertEquals(id, officer.getId().intValue());
+                    assertEquals(id, officer.getId());
                 });
     }
 
     @Test
     public void findAll() throws Exception {
-        officers.forEach(officer -> entityManager.persist(officer));
         List<String> dbNames = repository.findAll().stream()
                 .map(Officer::getLast)
                 .collect(Collectors.toList());
@@ -65,31 +55,25 @@ public class OfficerRepositoryTest {
 
     @Test
     public void count() throws Exception {
-        officers.forEach(officer -> entityManager.persist(officer));
         assertEquals(5, repository.count());
     }
 
     @Test
     public void delete() throws Exception {
-        officers.forEach(officer -> entityManager.persist(officer));
-        officers.stream()
-                .mapToInt(Officer::getId)
+        template.query("select id from officers", (rs, num) -> rs.getInt("id"))
                 .forEach(id -> repository.delete(repository.findOne(id)));
         assertEquals(0, repository.count());
     }
 
     @Test
     public void exists() throws Exception {
-        officers.forEach(officer -> entityManager.persist(officer));
-        officers.stream()
-                .mapToInt(Officer::getId)
+        template.query("select id from officers", (rs, num) -> rs.getInt("id"))
                 .forEach(id -> assertTrue(String.format("%d should exist", id),
                         repository.exists(id)));
     }
 
     @Test
     public void findByRank() throws Exception {
-        officers.forEach(officer -> entityManager.persist(officer));
         repository.findByRank(Rank.CAPTAIN).forEach(captain ->
                 assertEquals(Rank.CAPTAIN, captain.getRank()));
 
@@ -97,9 +81,9 @@ public class OfficerRepositoryTest {
 
     @Test
     public void findByLast() throws Exception {
-        officers.forEach(officer -> entityManager.persist(officer));
         List<String> lastNames = Arrays.asList("Kirk", "Picard", "Sisko", "Janeway", "Archer");
         lastNames.forEach(lastName ->
-                assertEquals(lastName, repository.findByLast(lastName).getLast()));
+                assertEquals(lastName,
+                        repository.findByLast(lastName).orElseGet(Officer::new).getLast()));
     }
 }
