@@ -5,9 +5,11 @@ import com.kousenit.entities.Rank;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,8 +20,9 @@ import static org.junit.Assert.*;
 
 @DataJpaTest
 @RunWith(SpringRunner.class)
+@Transactional
 public class OfficerRepositoryTest {
-    @Autowired
+    @Autowired @Qualifier("officerRepository")
     private OfficerRepository repository;
 
     @Autowired

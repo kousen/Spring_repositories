@@ -7,14 +7,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
@@ -26,12 +24,8 @@ public class JpaOfficerDAOTest {
     @Autowired @Qualifier("jpaOfficerDAO")
     private OfficerDAO dao;
 
-    private List<Officer> officers =
-            Arrays.asList(new Officer(Rank.CAPTAIN, "James", "Kirk"),
-                    new Officer(Rank.CAPTAIN, "Jean-Luc", "Picard"),
-                    new Officer(Rank.CAPTAIN, "Kathryn", "Janeway"),
-                    new Officer(Rank.CAPTAIN, "Benjamin", "Sisko"),
-                    new Officer(Rank.CAPTAIN, "Jonathan", "Archer"));
+    @Autowired
+    private JdbcTemplate template;
 
     @Test
     public void testSave() throws Exception {
@@ -45,19 +39,16 @@ public class JpaOfficerDAOTest {
 
     @Test
     public void findOne() throws Exception {
-        officers.forEach(officer -> dao.save(officer));
-        officers.stream()
-                .mapToInt(Officer::getId)
+        template.query("select id from officers", (rs, num) -> rs.getInt("id"))
                 .forEach(id -> {
                     Officer officer = dao.findOne(id);
                     assertNotNull(officer);
-                    assertEquals(id, officer.getId().intValue());
+                    assertEquals(id, officer.getId());
                 });
     }
 
     @Test
     public void findAll() throws Exception {
-        officers.forEach(officer -> dao.save(officer));
         List<String> dbNames = dao.findAll().stream()
                 .map(Officer::getLast)
                 .collect(Collectors.toList());
@@ -66,24 +57,19 @@ public class JpaOfficerDAOTest {
 
     @Test
     public void count() throws Exception {
-        officers.forEach(officer -> dao.save(officer));
-        assertEquals(5, dao.count().longValue());
+        assertEquals(5, dao.count().intValue());
     }
 
     @Test
     public void delete() throws Exception {
-        officers.forEach(officer -> dao.save(officer));
-        officers.stream()
-                .mapToInt(Officer::getId)
+        template.query("select id from officers", (rs, num) -> rs.getInt("id"))
                 .forEach(id -> dao.delete(dao.findOne(id)));
-        assertEquals(0, dao.count().longValue());
+        assertEquals(0, dao.count().intValue());
     }
 
     @Test
     public void exists() throws Exception {
-        officers.forEach(officer -> dao.save(officer));
-        officers.stream()
-                .mapToInt(Officer::getId)
+        template.query("select id from officers", (rs, num) -> rs.getInt("id"))
                 .forEach(id -> assertTrue(String.format("%d should exist", id),
                         dao.exists(id)));
     }

@@ -31,30 +31,6 @@ public class JdbcOfficerDAOTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private List<Officer> officers =
-            Arrays.asList(new Officer(Rank.CAPTAIN, "James", "Kirk"),
-                    new Officer(Rank.CAPTAIN, "Jean-Luc", "Picard"),
-                    new Officer(Rank.CAPTAIN, "Kathryn", "Janeway"),
-                    new Officer(Rank.CAPTAIN, "Benjamin", "Sisko"),
-                    new Officer(Rank.CAPTAIN, "Jonathan", "Archer"));
-
-    @Before
-    public void setUp() {
-        jdbcTemplate.execute("DROP TABLE IF EXISTS officers");
-        jdbcTemplate.execute("CREATE TABLE officers(\n" +
-                "    id INT NOT NULL AUTO_INCREMENT,\n" +
-                "    rank VARCHAR(20) NOT NULL, first_name VARCHAR(50) NOT NULL,\n" +
-                "    last_name VARCHAR(20) NOT NULL,\n" +
-                "    PRIMARY KEY(id)\n" +
-                ")");
-        officers.forEach(officer -> dao.save(officer));
-    }
-
-//    @After
-//    public void tearDown() {
-//        jdbcTemplate.execute("DROP TABLE IF EXISTS officers");
-//    }
-
     @Test
     public void save() throws Exception {
         Officer officer = new Officer(Rank.LIEUTENANT, "Nyota", "Uhuru");
