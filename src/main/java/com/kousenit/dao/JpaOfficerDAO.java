@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
 
+@SuppressWarnings("JpaQlInspection")
 @Repository
 public class JpaOfficerDAO implements OfficerDAO {
     @PersistenceContext

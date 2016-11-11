@@ -6,6 +6,3 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-  data:
-    rest:
-      enable-enum-translation: true

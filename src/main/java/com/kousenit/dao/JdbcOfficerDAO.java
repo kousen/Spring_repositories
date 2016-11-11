@@ -20,6 +20,7 @@ public class JdbcOfficerDAO implements OfficerDAO {
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert insertOfficer;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     public JdbcOfficerDAO(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
