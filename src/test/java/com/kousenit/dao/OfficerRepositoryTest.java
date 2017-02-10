@@ -22,7 +22,8 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @Transactional
 public class OfficerRepositoryTest {
-    @Autowired @Qualifier("officerRepository")
+    @Autowired
+    @Qualifier("officerRepository")
     private OfficerRepository repository;
 
     @Autowired
